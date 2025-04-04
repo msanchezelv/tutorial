@@ -1,0 +1,4 @@
+Para iniciar servidor: 
+    - cd [carpeta que contiene el proyecto]
+    - C:\Users\marinasa\Downloads\tutorial\TutorialReact\ludoteca-react>npm run dev
+    - acceder a la url: http://localhost:5173/
