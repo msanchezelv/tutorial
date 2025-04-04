@@ -1,100 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="AutoImportSettings">
-    <option name="autoReloadType" value="SELECTIVE" />
-  </component>
   <component name="ChangeListManager">
-    <list default="true" id="cda4a395-e472-45b6-9bb0-5dd0a86efda4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/tutorial.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/.gitattributes" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/TutorialApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/author/AuthorController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/author/AuthorRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/author/AuthorService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/author/AuthorServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/author/model/Author.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/author/model/AuthorDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/author/model/AuthorSearchDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/category/CategoryController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/category/CategoryRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/category/CategoryService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/category/CategoryServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/category/model/Category.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/category/model/CategoryDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/client/ClientController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/client/ClientRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/client/ClientService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/client/ClientServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/client/model/Client.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/client/model/ClientDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/common/criteria/SearchCriteria.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/common/pagination/PageableRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/config/ModelMapperConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/config/ResponsePage.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/game/GameController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/game/GameRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/game/GameService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/game/GameServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/game/GameSpecification.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/game/model/Game.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/game/model/GameDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/loan/LoanController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/loan/LoanRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/loan/LoanService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/loan/LoanServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/loan/model/Loan.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/java/com/ccsw/tutorial/loan/model/LoanDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/resources/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/main/resources/data.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/test/java/com/ccsw/tutorial/TutorialApplicationTests.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/test/java/com/ccsw/tutorial/author/AuthorIT.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/test/java/com/ccsw/tutorial/author/AuthorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/test/java/com/ccsw/tutorial/category/CategoryIT.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/test/java/com/ccsw/tutorial/category/CategoryTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/test/java/com/ccsw/tutorial/client/ClientIt.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/test/java/com/ccsw/tutorial/game/GameIT.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/test/java/com/ccsw/tutorial/loan/LoanIT.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/src/test/resources/application.properties" beforeDir="false" />
-    </list>
+    <list default="true" id="0a9046b4-5249-4233-a07f-401f24848417" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;msanchezelv&quot;
-  }
-}</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/msanchezelv/tutorial_SpringBoot_Capgemini.git&quot;,
-    &quot;accountId&quot;: &quot;93545dbd-005d-497f-b4a1-e9bb66a87f97&quot;
-  }
-}</component>
-  <component name="ProjectColorInfo">{
-  &quot;customColor&quot;: &quot;&quot;,
-  &quot;associatedIndex&quot;: 7
-}</component>
-  <component name="ProjectId" id="2vFtcEsrxt5SwpDs2CdhjRn1hKp" />
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 7
+}]]></component>
+  <component name="ProjectId" id="2vFz3hI8MUZf9QYlYPwW3uVpMer" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -102,43 +19,18 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/marinasa/Downloads/tutorial/TutorialSpringBoot",
-    "project.structure.last.edited": "Global Libraries",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "reference.settings.project.maven.importing"
+    "last_opened_file_path": "C:/Users/marinasa/IdeaProjects/tutorial_Capgemini"
   }
 }]]></component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\marinasa\Downloads\tutorial\TutorialSpringBoot" />
-    </key>
-  </component>
-  <component name="RunManager">
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="tutorial" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="tutorial" />
-      <option name="filePath" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="cda4a395-e472-45b6-9bb0-5dd0a86efda4" name="Changes" comment="" />
-      <created>1743752728681</created>
+      <changelist id="0a9046b4-5249-4233-a07f-401f24848417" name="Changes" comment="" />
+      <created>1743755414401</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1743752728681</updated>
+      <updated>1743755414401</updated>
     </task>
     <servers />
   </component>
