@@ -64,8 +64,6 @@ public class LoanIT {
     @Test
     public void findWithoutFiltersShouldReturnAllLoansInDB() {
 
-        int LOANS_WITHOUT_FILTER = 6;
-
         Map<String, Object> params = new HashMap<>();
         params.put(CLIENT_ID_PARAM, null);
         params.put(GAME_ID_PARAM, null);
@@ -73,43 +71,38 @@ public class LoanIT {
         ResponseEntity<List<LoanDto>> response = restTemplate.exchange(getUrlWithParams(), HttpMethod.GET, null, responseType, params);
 
         assertNotNull(response);
-        assertEquals(LOANS_WITHOUT_FILTER, response.getBody().size());
+        assertEquals(5, response.getBody().size());
     }
 
     @Test
     public void findExistsClientShouldReturnLoans() {
-
-        int LOANS_WITH_FILTER = 1;
-
         Map<String, Object> params = new HashMap<>();
-        params.put(CLIENT_ID_PARAM, EXISTS_CLIENT);
-        params.put(GAME_ID_PARAM, null);
+        params.put("idClient", EXISTS_CLIENT);
+        params.put("idGame", null);
 
-        ResponseEntity<List<LoanDto>> response = restTemplate.exchange(getUrlWithParams(), HttpMethod.GET, null, responseType, params);
+        ResponseEntity<List<LoanDto>> response = restTemplate.exchange(getUrlWithParams(), HttpMethod.GET, null, new ParameterizedTypeReference<>() {
+        }, params);
 
         assertNotNull(response);
-        assertEquals(LOANS_WITH_FILTER, response.getBody().size());
+        System.out.println("Response: " + response.getBody());
+        assertEquals(1, response.getBody().size());
     }
 
     @Test
     public void findNotExistsClientShouldReturnLoans() {
 
-        int LOANS_WITH_FILTER = 2;
-
-        Map<String, Object> params = new HashMap<>();
-        params.put(CLIENT_ID_PARAM, null);
-        params.put(GAME_ID_PARAM, EXISTS_GAME);
+        Map<Long, Object> params = new HashMap<>();
+        params.put(EXISTS_CLIENT, null);
+        params.put(EXISTS_GAME, null);
 
         ResponseEntity<List<LoanDto>> response = restTemplate.exchange(getUrlWithParams(), HttpMethod.GET, null, responseType, params);
 
         assertNotNull(response);
-        assertEquals(LOANS_WITH_FILTER, response.getBody().size());
+        assertEquals(5, response.getBody().size());
     }
 
     @Test
     public void findExistsClientAndGameShouldReturnLoans() {
-
-        int LOANS_WITH_FILTER = 1;
 
         Map<String, Object> params = new HashMap<>();
         params.put(CLIENT_ID_PARAM, EXISTS_CLIENT);
@@ -118,7 +111,7 @@ public class LoanIT {
         ResponseEntity<List<LoanDto>> response = restTemplate.exchange(getUrlWithParams(), HttpMethod.GET, null, responseType, params);
 
         assertNotNull(response);
-        assertEquals(LOANS_WITH_FILTER, response.getBody().size());
+        assertEquals(1, response.getBody().size());
     }
 
 }

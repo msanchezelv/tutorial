@@ -40,10 +40,10 @@ public class ClientIT {
         ResponseEntity<List<ClientDto>> response = restTemplate.exchange(LOCALHOST + port + SERVICE_PATH, HttpMethod.GET, null, responseType);
 
         assertNotNull(response);
-        assertEquals(3, response.getBody().size());
+        assertEquals(4, response.getBody().size());
     }
 
-    public static final Long NEW_CLIENT_ID = 4L;
+    public static final Long NEW_CLIENT_ID = 5L;
     public static final String NEW_CLIENT_NAME = "Juan López";
 
     @Test
@@ -56,7 +56,7 @@ public class ClientIT {
 
         ResponseEntity<List<ClientDto>> response = restTemplate.exchange(LOCALHOST + port + SERVICE_PATH, HttpMethod.GET, null, responseType);
         assertNotNull(response);
-        assertEquals(4, response.getBody().size());
+        assertEquals(5, response.getBody().size());
 
         ClientDto clientSearch = response.getBody().stream().filter(item -> item.getId().equals(NEW_CLIENT_ID)).findFirst().orElse(null);
         assertNotNull(clientSearch);
@@ -84,7 +84,7 @@ public class ClientIT {
     }
 
     @Test
-    public void modifyWithNotExistIdShouldInternalError() {
+    public void modifyWithNotExistIdShouldReturnInternalError() {
 
         ClientDto dto = new ClientDto();
         dto.setName(NEW_CLIENT_NAME);
@@ -103,7 +103,7 @@ public class ClientIT {
 
         ResponseEntity<List<ClientDto>> response = restTemplate.exchange(LOCALHOST + port + SERVICE_PATH, HttpMethod.GET, null, responseType);
         assertNotNull(response);
-        assertEquals(2, response.getBody().size());
+        assertEquals(3, response.getBody().size());
     }
 
     @Test

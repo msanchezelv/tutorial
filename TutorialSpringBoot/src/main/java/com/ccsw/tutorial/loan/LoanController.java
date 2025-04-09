@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,12 +38,12 @@ public class LoanController {
      */
     @Operation(summary = "Find Page", description = "Method that returns a page of Loans")
     @RequestMapping(path = "", method = RequestMethod.POST)
-    public Page<LoanDto> findPage(@RequestBody LoanSearchDto dto) {
+    public Page<LoanDto> find(@RequestParam(value = "idGame", required = false) Long idGame, @RequestParam(value = "idClient", required = false) Long idClient, @RequestParam(value = "date", required = false) LocalDate date,
+            @RequestBody LoanSearchDto loanSearchDto) {
 
-        Page<Loan> page = this.loanService.findPage(dto);
+        Page<Loan> loansPage = loanService.findPagedAndFiltered(idGame, idClient, date, loanSearchDto);
 
-        return new PageImpl<>(page.getContent().stream().map(e -> mapper.map(e, LoanDto.class)).collect(Collectors.toList()), page.getPageable(), page.getTotalElements());
-
+        return new PageImpl<>(loansPage.getContent().stream().map(loan -> mapper.map(loan, LoanDto.class)).collect(Collectors.toList()), loansPage.getPageable(), loansPage.getTotalElements());
     }
 
     /**
@@ -75,7 +76,7 @@ public class LoanController {
      *
      * @return {@link List} de {@link LoanDto}
      */
-    @Operation(summary = "Find", description = "Method that return a list of Loans")
+    @Operation(summary = "Find", description = "Method that returns a list of Loans")
     @RequestMapping(path = "", method = RequestMethod.GET)
     public List<LoanDto> findAll() {
 

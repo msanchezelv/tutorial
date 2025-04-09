@@ -4,7 +4,7 @@ import com.ccsw.tutorial.client.model.Client;
 import com.ccsw.tutorial.game.model.Game;
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * @author marina31sanchez
@@ -19,18 +19,18 @@ public class Loan {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "game_id", nullable = false)
+    @JoinColumn(name = "game", nullable = false)
     private Game game;
 
     @ManyToOne
-    @JoinColumn(name = "client_id", nullable = false)
+    @JoinColumn(name = "client", nullable = false)
     private Client client;
 
     @Column(name = "loan_date", nullable = false)
-    private Date loanDate;
+    private LocalDate loanDate;
 
     @Column(name = "return_date", nullable = false)
-    private Date returnDate;
+    private LocalDate returnDate;
 
     /**
      * @return id
@@ -77,28 +77,28 @@ public class Loan {
     /**
      * @return loanDate
      */
-    public Date getLoanDate() {
+    public LocalDate getLoanDate() {
         return loanDate;
     }
 
     /**
      * @param loanDate new value of {@link #getLoanDate}
      */
-    public void setLoanDate(Date loanDate) {
+    public void setLoanDate(LocalDate loanDate) {
         this.loanDate = loanDate;
     }
 
     /**
      * @return returnDate
      */
-    public Date getReturnDate() {
+    public LocalDate getReturnDate() {
         return returnDate;
     }
 
     /**
      * @param returnDate new value of {@link #getReturnDate}
      */
-    public void setReturnDate(Date returnDate) {
+    public void setReturnDate(LocalDate returnDate) {
         this.returnDate = returnDate;
     }
 }

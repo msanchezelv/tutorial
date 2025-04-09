@@ -1,9 +1,9 @@
 package com.ccsw.tutorial.loan.model;
 
-import com.ccsw.tutorial.client.model.Client;
-import com.ccsw.tutorial.game.model.Game;
+import com.ccsw.tutorial.client.model.ClientDto;
+import com.ccsw.tutorial.game.model.GameDto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * @author marina31sanchez
@@ -12,13 +12,13 @@ public class LoanDto {
 
     private Long id;
 
-    private Game game;
+    private GameDto game;
 
-    private Client client;
+    private ClientDto client;
 
-    private Date loanDate;
+    private LocalDate loanDate;
 
-    private Date returnDate;
+    private LocalDate returnDate;
 
     /**
      * @return id
@@ -39,7 +39,7 @@ public class LoanDto {
     /**
      * @return game
      */
-    public Game getGame() {
+    public GameDto getGame() {
 
         return this.game;
     }
@@ -47,7 +47,7 @@ public class LoanDto {
     /**
      * @param game new value of {@link #getGame}.
      */
-    public void setName(Game game) {
+    public void setGame(GameDto game) {
 
         this.game = game;
     }
@@ -55,7 +55,7 @@ public class LoanDto {
     /**
      * @return client
      */
-    public Client getClient() {
+    public ClientDto getClient() {
 
         return this.client;
     }
@@ -63,7 +63,7 @@ public class LoanDto {
     /**
      * @param client new value of {@link #getClient}.
      */
-    public void getClient(Client client) {
+    public void setClient(ClientDto client) {
 
         this.client = client;
     }
@@ -71,28 +71,28 @@ public class LoanDto {
     /**
      * @return loanDate
      */
-    public Date getLoanDate() {
+    public LocalDate getLoanDate() {
         return loanDate;
     }
 
     /**
      * @param loanDate new value of {@link #getLoanDate}
      */
-    public void setLoanDate(Date loanDate) {
+    public void setLoanDate(LocalDate loanDate) {
         this.loanDate = loanDate;
     }
 
     /**
      * @return returnDate
      */
-    public Date getReturnDate() {
+    public LocalDate getReturnDate() {
         return returnDate;
     }
 
     /**
      * @param returnDate new value of {@link #getReturnDate}
      */
-    public void setReturnDate(Date returnDate) {
+    public void setReturnDate(LocalDate returnDate) {
         this.returnDate = returnDate;
     }
 }

@@ -5,6 +5,7 @@ import com.ccsw.tutorial.loan.model.LoanDto;
 import com.ccsw.tutorial.loan.model.LoanSearchDto;
 import org.springframework.data.domain.Page;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -20,12 +21,12 @@ public interface LoanService {
      */
     Loan get(Long id);
 
-    /**
-     * Method to return a Pageable list of {@link Loan}
-     * @param dto dto de búsqueda
-     * @return {@link Page} de {@link Loan}
-     */
-    Page<Loan> findPage(LoanSearchDto dto);
+    //    /**
+    //     * Method to return a Pageable list of {@link Loan}
+    //     * @param dto dto de búsqueda
+    //     * @return {@link Page} de {@link Loan}
+    //     */
+    //    Page<Loan> findPage(LoanSearchDto dto);
 
     /**
      *Method to create or update a {@link Loan}
@@ -48,4 +49,7 @@ public interface LoanService {
      * @return
      */
     public List<Loan> findAll();
+
+    Page<Loan> findPagedAndFiltered(Long idGame, Long idClient, LocalDate date, LoanSearchDto loanSearchDto);
+
 }

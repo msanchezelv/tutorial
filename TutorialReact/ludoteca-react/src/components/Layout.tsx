@@ -16,9 +16,11 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { deleteMessage } from "../redux/features/messageSlice";
 
 const pages = [
-  { name: "Catalogo", link: "games" },
+  { name: "Catálogo", link: "games" },
   { name: "Categorías", link: "categories" },
   { name: "Autores", link: "authors" },
+  { name: "Clientes", link: "clients" },
+  { name: "Préstamos", link: "loans" },
 ];
 
 export const Layout = () => {
