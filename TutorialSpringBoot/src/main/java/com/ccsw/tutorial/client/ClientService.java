@@ -10,14 +10,14 @@ import java.util.List;
  */
 public interface ClientService {
     /**
-     * Método para recuperar todas las {@link Client}
+     * Method to return all {@link Client}
      *
      * @return {@link List} de {@link Client}
      */
     List<Client> findAll();
 
     /**
-     * Método para crear o actualizar una {@link Client}
+     * Method to create or update a {@link Client}
      *
      * @param id PK de la entidad
      * @param dto datos de la entidad
@@ -25,7 +25,7 @@ public interface ClientService {
     void save(Long id, ClientDto dto);
 
     /**
-     * Método para borrar una {@link Client}
+     * Method to delete a {@link Client}
      *
      * @param id PK de la entidad
      */

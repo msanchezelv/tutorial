@@ -28,7 +28,7 @@ public class ClientController {
     ModelMapper mapper;
 
     /**
-     * Método para recuperar todas los clientes
+     * Method to return all Clients
      *
      * @return {@link List} de {@link ClientDto}
      */
@@ -42,7 +42,7 @@ public class ClientController {
     }
 
     /**
-     * Método para crear o actualizar un cliente
+     * Method to create or update a Client
      *
      * @param id PK de la entidad
      * @param dto datos de la entidad
@@ -55,7 +55,7 @@ public class ClientController {
     }
 
     /**
-     * Método para borrar una categoria
+     * Method to delete a Client
      *
      * @param id PK de la entidad
      */

@@ -5,8 +5,11 @@ import com.ccsw.tutorial.game.model.Game;
 import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.io.Serial;
+
 public class GameSpecification implements Specification<Game> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final SearchCriteria criteria;
