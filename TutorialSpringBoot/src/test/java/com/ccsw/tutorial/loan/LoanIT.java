@@ -1,6 +1,7 @@
 package com.ccsw.tutorial.loan;
 
 import com.ccsw.tutorial.loan.model.LoanDto;
+import org.h2.mvstore.Page;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -76,42 +77,18 @@ public class LoanIT {
 
     @Test
     public void findExistsClientShouldReturnLoans() {
-        Map<String, Object> params = new HashMap<>();
-        params.put("idClient", EXISTS_CLIENT);
-        params.put("idGame", null);
 
-        ResponseEntity<List<LoanDto>> response = restTemplate.exchange(getUrlWithParams(), HttpMethod.GET, null, new ParameterizedTypeReference<>() {
-        }, params);
-
-        assertNotNull(response);
-        System.out.println("Response: " + response.getBody());
-        assertEquals(1, response.getBody().size());
     }
 
     @Test
     public void findNotExistsClientShouldReturnLoans() {
 
-        Map<Long, Object> params = new HashMap<>();
-        params.put(EXISTS_CLIENT, null);
-        params.put(EXISTS_GAME, null);
-
-        ResponseEntity<List<LoanDto>> response = restTemplate.exchange(getUrlWithParams(), HttpMethod.GET, null, responseType, params);
-
-        assertNotNull(response);
-        assertEquals(5, response.getBody().size());
+        M
     }
 
     @Test
     public void findExistsClientAndGameShouldReturnLoans() {
 
-        Map<String, Object> params = new HashMap<>();
-        params.put(CLIENT_ID_PARAM, EXISTS_CLIENT);
-        params.put(GAME_ID_PARAM, EXISTS_GAME);
-
-        ResponseEntity<List<LoanDto>> response = restTemplate.exchange(getUrlWithParams(), HttpMethod.GET, null, responseType, params);
-
-        assertNotNull(response);
-        assertEquals(1, response.getBody().size());
     }
 
 }

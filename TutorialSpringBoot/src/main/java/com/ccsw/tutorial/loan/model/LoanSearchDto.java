@@ -6,6 +6,7 @@ import com.ccsw.tutorial.common.pagination.PageableRequest;
  * @author marina31sanchez
  */
 public class LoanSearchDto {
+
     private PageableRequest pageable;
 
     public PageableRequest getPageable() {

@@ -2,6 +2,7 @@ package com.ccsw.tutorial.loan;
 
 import com.ccsw.tutorial.client.ClientService;
 import com.ccsw.tutorial.common.criteria.SearchCriteria;
+import com.ccsw.tutorial.game.GameAlredyLoanedException;
 import com.ccsw.tutorial.game.GameService;
 import com.ccsw.tutorial.loan.model.Loan;
 import com.ccsw.tutorial.loan.model.LoanDto;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+
 
 /**
  * @author marina31sanchez
@@ -38,7 +40,6 @@ public class LoanServiceImpl implements LoanService {
      */
     @Override
     public Loan get(Long id) {
-
         return this.loanRepository.findById(id).orElse(null);
     }
 
@@ -46,20 +47,26 @@ public class LoanServiceImpl implements LoanService {
      * {@inheritDoc}
      */
     @Override
-    public void save(Long id, LoanDto data) {
+    public void save(LoanDto dto) throws GameAlredyLoanedException {
+        Loan loan = new Loan();
 
-        Loan loan;
+        BeanUtils.copyProperties(dto, loan, "id", "client", "game");
 
-        if (id == null) {
-            loan = new Loan();
-        } else {
-            loan = this.get(id);
+        if (dto.getReturnDate().isBefore(dto.getLoanDate())) {
+            throw new GameAlredyLoanedException("La fecha de finalización del préstamos no puede ser anterior a la fecha de inicio");
         }
 
-        BeanUtils.copyProperties(data, loan, "id", "game", "client");
+        if (gameAlreadyLoanedInDates(dto.getGame().getId(), dto.getLoanDate(), dto.getReturnDate())) {
+            throw new GameAlredyLoanedException("Este juego ya ha sido prestado para las fechas seleccionadas");
+        }
 
-        loan.setClient(clientService.getClientById(data.getClient().getId()));
-        loan.setGame(gameService.getGameById(data.getGame().getId()));
+        if (clientAlreadyHasGameLoaned(dto.getClient().getId(), dto.getLoanDate(), dto.getReturnDate())) {
+            throw new GameAlredyLoanedException("Este cliente ya dispone de un préstamo para las fechas seleccionadas");
+        }
+
+        loan.setGame(gameService.getGameById(dto.getGame().getId()));
+
+        loan.setClient(clientService.getClientById(dto.getClient().getId()));
 
         this.loanRepository.save(loan);
     }
@@ -69,9 +76,8 @@ public class LoanServiceImpl implements LoanService {
      */
     @Override
     public void delete(Long id) throws Exception {
-
         if (this.get(id) == null) {
-            throw new Exception("Not exists");
+            throw new Exception("Error");
         }
 
         this.loanRepository.deleteById(id);
@@ -81,33 +87,36 @@ public class LoanServiceImpl implements LoanService {
      * {@inheritDoc}
      */
     @Override
-    public List<Loan> findAll() {
-
-        return (List<Loan>) this.loanRepository.findAll();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public Page<Loan> findPagedAndFiltered(Long idGame, Long idClient, LocalDate date, LoanSearchDto loanSearchDto) {
         Pageable pageable = loanSearchDto.getPageable().getPageable();
 
-        Specification<Loan> spec = Specification.where(null);
+        Specification<Loan> specification = Specification.where(null);
 
         if (idGame != null) {
-            LoanSpecification titleSpec = new LoanSpecification(new SearchCriteria("gameId", ":", idGame));
-            spec = spec.and(titleSpec);
-        }
-        if (idClient != null) {
-            LoanSpecification clientSpec = new LoanSpecification(new SearchCriteria("clientId", ":", idClient));
-            spec = spec.and(clientSpec);
-        }
-        if (date != null) {
-            LoanSpecification dateSpec = new LoanSpecification(new SearchCriteria("loanDate", ":", date));
-            spec = spec.and(dateSpec);
+            LoanSpecification titleSpec = new LoanSpecification(new SearchCriteria("game.id", ":", idGame));
+            specification = specification.and(titleSpec);
         }
 
-        return this.loanRepository.findAll(spec, pageable);
+        if (idClient != null) {
+            LoanSpecification clientSpec = new LoanSpecification(new SearchCriteria("client.id", ":", idClient));
+            specification = specification.and(clientSpec);
+        }
+
+        if (date != null) {
+            LoanSpecification dateSpec = new LoanSpecification(new SearchCriteria("loanDate", ":", date));
+            specification = specification.and(dateSpec);
+        }
+
+        return this.loanRepository.findAll(specification, pageable);
+    }
+
+    private boolean clientAlreadyHasGameLoaned(Long id, LocalDate returnDate, LocalDate loanDate) {
+        List<Loan> loans = this.loanRepository.findByClientIdAndLoanDateLessThanEqualAndReturnDateGreaterThanEqual(id, returnDate, loanDate);
+        return !loans.isEmpty();
+    }
+
+    private boolean gameAlreadyLoanedInDates(Long id, LocalDate returnDate, LocalDate loanDate) {
+        List<Loan> loans = this.loanRepository.findByGameIdAndLoanDateLessThanEqualAndReturnDateGreaterThanEqual(id, returnDate, loanDate);
+        return !loans.isEmpty();
     }
 }

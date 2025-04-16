@@ -11,13 +11,9 @@ import java.time.LocalDate;
 public class LoanDto {
 
     private Long id;
-
     private GameDto game;
-
     private ClientDto client;
-
     private LocalDate loanDate;
-
     private LocalDate returnDate;
 
     /**

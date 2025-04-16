@@ -1,5 +1,6 @@
 package com.ccsw.tutorial.loan;
 
+import com.ccsw.tutorial.game.GameAlredyLoanedException;
 import com.ccsw.tutorial.loan.model.Loan;
 import com.ccsw.tutorial.loan.model.LoanDto;
 import com.ccsw.tutorial.loan.model.LoanSearchDto;
@@ -12,16 +13,15 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * @author marina31sanchez
  */
-@Tag(name = "Loan", description = "API of Loan")
-@RequestMapping(value = "/loan")
 @RestController
 @CrossOrigin(origins = "*")
+@Tag(name = "Loan", description = "API of Loan")
+@RequestMapping(value = "/loan")
 public class LoanController {
 
     @Autowired
@@ -33,13 +33,12 @@ public class LoanController {
     /**
      * Metodo para recuperar un listado paginado de {@link Loan}
      *
-     * @param dto dto de búsqueda
      * @return {@link Page} de {@link LoanDto}
      */
-    @Operation(summary = "Find Page", description = "Method that returns a page of Loans")
+    @Operation(summary = "Find Page", description = "Method that returns a list of Loans, optionally filtered by game and or client")
     @RequestMapping(path = "", method = RequestMethod.POST)
     public Page<LoanDto> find(@RequestParam(value = "idGame", required = false) Long idGame, @RequestParam(value = "idClient", required = false) Long idClient, @RequestParam(value = "date", required = false) LocalDate date,
-            @RequestBody LoanSearchDto loanSearchDto) {
+                              @RequestBody LoanSearchDto loanSearchDto) {
 
         Page<Loan> loansPage = loanService.findPagedAndFiltered(idGame, idClient, date, loanSearchDto);
 
@@ -47,20 +46,19 @@ public class LoanController {
     }
 
     /**
-     * Método para crear o actualizar un {@link Loan}
+     * Metodo para crear o actualizar un {@link Loan}
      *
-     * @param id PK de la entidad
      * @param dto datos de la entidad
      */
-    @Operation(summary = "Save or Update", description = "Method that saves or updates a Loan")
-    @RequestMapping(path = { "", "/{id}" }, method = RequestMethod.PUT)
-    public void save(@PathVariable(name = "id", required = false) Long id, @RequestBody LoanDto dto) {
+    @Operation(summary = "Save", description = "Method that saves a Loan")
+    @RequestMapping(path = "", method = RequestMethod.PUT)
+    public void save(@RequestBody LoanDto dto) throws GameAlredyLoanedException {
 
-        this.loanService.save(id, dto);
+        this.loanService.save(dto);
     }
 
     /**
-     * Método para eliminar un {@link Loan}
+     * Metodo para eliminar un {@link Loan}
      *
      * @param id PK de la entidad
      */
@@ -69,19 +67,5 @@ public class LoanController {
     public void delete(@PathVariable("id") Long id) throws Exception {
 
         this.loanService.delete(id);
-    }
-
-    /**
-     * Recupera un listado de autores {@link Loan}
-     *
-     * @return {@link List} de {@link LoanDto}
-     */
-    @Operation(summary = "Find", description = "Method that returns a list of Loans")
-    @RequestMapping(path = "", method = RequestMethod.GET)
-    public List<LoanDto> findAll() {
-
-        List<Loan> loans = this.loanService.findAll();
-
-        return loans.stream().map(e -> mapper.map(e, LoanDto.class)).collect(Collectors.toList());
     }
 }
