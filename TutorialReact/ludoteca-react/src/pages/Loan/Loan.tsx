@@ -1,4 +1,5 @@
 import { useEffect, useState, useContext } from "react";
+import * as React from "react";
 import Button from "@mui/material/Button";
 import TableHead from "@mui/material/TableHead";
 import Table from "@mui/material/Table";
@@ -24,8 +25,18 @@ import {
   useCreateLoanMutation,
   useUpdateLoanMutation,
   useGetLoansByPageQuery,
+  useGetClientsQuery,
+  useGetGamesQuery,
 } from "../../redux/services/ludotecaApi";
 import { LoaderContext } from "../../context/LoaderProvider";
+import { FormControl, MenuItem, TextField, Select } from "@mui/material";
+import dayjs, { Dayjs } from "dayjs";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DesktopDatePicker } from "@mui/x-date-pickers";
+import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
+import { Game } from "../../types/Game";
+import { Client } from "../../types/Client";
 
 export const Loan = () => {
   const [pageNumber, setPageNumber] = useState(0);
@@ -33,13 +44,18 @@ export const Loan = () => {
   const [total, setTotal] = useState(0);
   const [loans, setLoans] = useState<LoanModel[]>([]);
   const [openCreate, setOpenCreate] = useState(false);
-  const [idToDelete, setIdToDelete] = useState("");
-  const [loanToUpdate, setLoanToUpdate] = useState<LoanModel | null>(
-    null
-  );
+  const [idToDelete, setIdToDelete] = useState<string>("");
+  const [filterbyGame, setFilterByGame] = useState("");
+  const [filterbyClient, setFilterByClient] = useState("");
+  const [filterDate, setFilterDate] = useState<Date | null>(null);
 
   const dispatch = useAppDispatch();
   const loader = useContext(LoaderContext);
+
+  const { data: clients } = useGetClientsQuery(null);
+  const { data: games } = useGetGamesQuery({title: '', idCategory: ''});
+
+
 
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
@@ -55,39 +71,49 @@ export const Loan = () => {
     setPageSize(parseInt(event.target.value, 10));
   };
 
-  const { data, error, isLoading } = useGetLoansByPageQuery({
+  const { data: dataPage, error: errorPage, isLoading: isLoadingPage, isFetching: isFetchingPage } = useGetLoansByPageQuery({
     pageNumber,
     pageSize,
+    idGame: filterbyGame,
+    idClient: filterbyClient,
+    date: filterDate ? dayjs(filterDate).startOf('day').format('YYYY-MM-DD'): '',
   });
 
   const [deleteLoanApi, { isLoading: isLoadingDelete, error: errorDelete }] =
     useDeleteLoanMutation();
 
-  const [createLoanApi, { isLoading: isLoadingCreate }] =
+  const [createLoanApi, { isLoading: isLoadingCreate, error: errorCreate }] =
     useCreateLoanMutation();
-
-  const [updateLoanApi, { isLoading: isLoadingUpdate }] =
-    useUpdateLoanMutation();
 
   useEffect(() => {
     loader.showLoading(
-      isLoadingCreate || isLoading || isLoadingDelete || isLoadingUpdate
+      isLoadingCreate || isLoadingDelete || isFetchingPage
     );
-  }, [isLoadingCreate, isLoading, isLoadingDelete, isLoadingUpdate]);
+  }, [isLoadingCreate, isLoadingDelete, isFetchingPage]);
 
   useEffect(() => {
-    if (data) {
-      setLoans(data.content);
-      setTotal(data.totalElements);
+    if (dataPage) {
+      setLoans(dataPage.content);
+      setTotal(dataPage.totalElements);
     }
-  }, [data]);
+  }, [dataPage, filterbyGame, filterbyClient, filterDate, pageNumber, pageSize]);
+
+  useEffect(() => {
+    if (errorCreate) {
+      setMessage({
+        text: "Se ha producido un error al crear el préstamo",
+        type: "error",
+      });
+      
+    }
+  }, [errorCreate]);
 
   useEffect(() => {
     if (errorDelete) {
-      if ("status" in errorDelete) {
+      if("status" in errorDelete) {
         dispatch(
           setMessage({
-            text: (errorDelete?.data as BackError).msg,
+            text: "Se ha producido un error al eliminar el préstamo",
             type: "error",
           })
         );
@@ -95,49 +121,107 @@ export const Loan = () => {
     }
   }, [errorDelete, dispatch]);
 
-  useEffect(() => {
-    if (error) {
-      dispatch(setMessage({ text: "Se ha producido un error", type: "error" }));
-    }
-  }, [error]);
+  useEffect(() => {}, [filterbyGame, filterbyClient, filterDate, pageNumber, pageSize]);
 
   const createLoan = (loan: LoanModel) => {
     setOpenCreate(false);
-    if (loan.id) {
-      updateLoanApi(loan)
-        .then(() => {
-          dispatch(
-            setMessage({
-              text: "Préstamo actualizado correctamente",
-              type: "ok",
-            })
-          );
-          setLoanToUpdate(null);
-        })
-        .catch((err) => console.log(err));
-    } else {
-      createLoanApi(loan)
-        .then(() => {
-          dispatch(
-            setMessage({ text: "Préstamo creado correctamente", type: "ok" })
-          );
-          setLoanToUpdate(null);
-        })
-        .catch((err) => console.log(err));
-    }
+    createLoanApi(loan)
+      .then(() => {
+        setPageNumber(0);
+        dispatch(
+          setMessage({ text: "Préstamo creado correctamente", type: "ok" })
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+        dispatch(setMessage({ text: "Se ha producido un error al crear el préstamo", type: "error" }));
+      })
   };
 
-  const deleteLoan = () => {
-    deleteLoanApi(idToDelete)
+  const handleDeleteLoan = () => {
+    if (idToDelete){
+      deleteLoanApi(idToDelete)
       .then(() => {
+        setPageNumber(0);
         setIdToDelete("");
       })
-      .catch((err) => console.log(err));
+      .catch((error) => {
+        console.log("Error al eliminar el préstamo", error);
+        dispatch(setMessage({text:"Error al eliminar el préstamo", type:"error"}));
+      });
+    }else{dispatch(setMessage({text:"No se ha seleccionado ningún préstamo", type:"error"}));}
   };
 
   return (
     <div className="container">
       <h1>Préstamos</h1>
+      <div className='filters'>
+        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+          <TextField
+            id="game"
+            select
+            label="Juego"
+            fullWidth
+            variant="standard"
+            name="game"
+            value={filterbyGame}
+            onChange={(e) => setFilterByGame(e.target.value)}
+          >
+            {
+              games?.map((game: Game) => (
+                <MenuItem key={game.id} value={game.id}>
+                  {game.title}
+                </MenuItem>
+              ))}
+          </TextField>
+        </FormControl>
+        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+          <TextField
+            id="client"
+            select
+            label="Cliente"
+            fullWidth
+            variant="standard"
+            name="client"
+            value={filterbyClient}
+            onChange={(e) => setFilterByClient(e.target.value)}
+          >
+            {
+              clients?.map((client: Client) => (
+                <MenuItem key={client.id} value={client.id}>
+                  {client.name}
+                </MenuItem>
+              ))}
+          </TextField>
+        </FormControl>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DemoContainer components={["DatePicker", "DesktopDatePicker"]}>
+            <DemoItem label="Fecha">
+              <DesktopDatePicker
+                value={filterDate ? dayjs(filterDate) : null}
+                onChange={(newDate) => {
+                  if(newDate && newDate.isValid()){
+                  setFilterDate(newDate.startOf('day').toDate());
+                }else{
+                  setFilterDate(null);
+                }
+              }}
+              />
+            </DemoItem>
+          </DemoContainer>
+        </LocalizationProvider>
+
+        <Button
+        variant="outlined"
+        onClick={() => {
+          setFilterByGame("");
+          setFilterByClient("");
+          setFilterDate(null);
+        }}
+        >
+          Limpiar
+        </Button>
+        </div>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
           <TableHead
@@ -167,24 +251,14 @@ export const Loan = () => {
                 <TableCell align="right">
                   <div className={styles.tableActions}>
                     <IconButton
-                      aria-label="update"
+                      aria-label="delete"
                       color="primary"
                       onClick={() => {
-                        setLoanToUpdate(loan);
-                        setOpenCreate(true);
-                      }}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      aria-label="delete"
-                      color="error"
-                      onClick={() => {
-                        setIdToDelete(loan.id);
+                        setIdToDelete(loan.id);;
                       }}
                     >
                       <ClearIcon />
-                    </IconButton>
+                    </IconButton>                    
                   </div>
                 </TableCell>
               </TableRow>
@@ -219,9 +293,8 @@ export const Loan = () => {
       {openCreate && (
         <CreateLoan
           create={createLoan}
-          loan={loanToUpdate}
+          loan={null}
           closeModal={() => {
-            setLoanToUpdate(null);
             setOpenCreate(false);
           }}
         />
@@ -230,7 +303,7 @@ export const Loan = () => {
         <ConfirmDialog
           title="Eliminar préstamo"
           text="Atención va a eliminar el préstamo, se perderán todos sus datos, ¿proceder?"
-          confirm={deleteLoan}
+          confirm={handleDeleteLoan}
           closeModal={() => setIdToDelete("")}
         />
       )}

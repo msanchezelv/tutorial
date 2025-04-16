@@ -92,7 +92,7 @@ import { useGetGamesQuery, useGetClientsQuery } from "../../../redux/services/lu
         const returnDate = new Date(form.returnDate);
   
         if (isNaN(loanDate.getTime()) || isNaN(returnDate.getTime())) {
-          setDateError("Las fechas proporcionadas no son válidas.");
+          setDateError('Las fechas introducidas no son válidas.');
           return;
         }
   
@@ -108,19 +108,19 @@ import { useGetGamesQuery, useGetClientsQuery } from "../../../redux/services/lu
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   
         if (diffDays > 14) {
-          setDateError('El período de préstamo no puede ser superior a 14 días.');
+          setDateError('El período de un préstamo no puede ser superior a 14 días.');
           return;
         }
   
         if (!form.client) {
-          setGameError("Debe seleccionar un cliente.");
+          setGameError('Seleccione un cliente.');
           return;
         }
 
         const gameId = form.game?.id ? Number(form.game.id) : -1;
 
         if (gameId === -1) {
-          setGameError("Debe seleccionar un juego.");
+          setGameError('Seleccione un juego.');
           return;
         }
   
@@ -130,14 +130,14 @@ import { useGetGamesQuery, useGetClientsQuery } from "../../../redux/services/lu
           const hasExceededLoanLimit = await checkClientLoanLimit(clientId, formattedLoanDate, formattedReturnDate, pageNumber, pageSize);
   
           if (hasExceededLoanLimit) {
-            setGameError('El cliente ya tiene un préstamo en alguna de estas fechas o el juego ya está prestado.');
+            setGameError('El cliente ya dispone de un préstamo en las fechas seleccionadas o el juego no está disponible.');
             return;
           }
 
           const isGameLoaned = await checkIfGameIsLoaned(gameId, formattedLoanDate, formattedReturnDate, pageNumber, pageSize);
   
           if (isGameLoaned) {
-            setGameError('El juego ya está prestado en estas fechas.');
+            setGameError('El juego no está disponible para estas fechas.');
             return;
           }
   
@@ -154,7 +154,7 @@ import { useGetGamesQuery, useGetClientsQuery } from "../../../redux/services/lu
         } catch (error: any) {
           console.error("Error during loan creation:", error);
 
-          const errorMessage = error.message || 'Ocurrió un error al intentar crear el préstamo.';
+          const errorMessage = error.message || 'Ha ocurrido un error al intentar crear el préstamo.';
 
           if (error.response) {
             try {
