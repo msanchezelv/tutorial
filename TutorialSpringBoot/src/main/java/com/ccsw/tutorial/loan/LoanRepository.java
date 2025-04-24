@@ -25,7 +25,8 @@ public interface LoanRepository extends CrudRepository<Loan, Long>, JpaSpecifica
     @EntityGraph(attributePaths = {"game", "client", "loanDate", "returnDate"})
     Page<Loan> findAll(Specification<Loan> spec, Pageable pageable);
 
-    List<Loan> findByGameIdAndLoanDateLessThanEqualAndReturnDateGreaterThanEqual(Long gameId, LocalDate returnDate, LocalDate loanDate);
+    List<Loan> findByGameIdAndLoanDateBeforeAndReturnDateAfter(Long gameId, LocalDate returnDate, LocalDate loanDate);
 
-    List<Loan> findByClientIdAndLoanDateLessThanEqualAndReturnDateGreaterThanEqual(Long clientId, LocalDate returnDate, LocalDate loanDate);
+    List<Loan> findByClientIdAndLoanDateBeforeAndReturnDateAfter(Long clientId, LocalDate returnDate, LocalDate loanDate);
 }
+

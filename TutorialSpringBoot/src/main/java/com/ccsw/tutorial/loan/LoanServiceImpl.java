@@ -111,12 +111,12 @@ public class LoanServiceImpl implements LoanService {
     }
 
     private boolean clientAlreadyHasGameLoaned(Long id, LocalDate returnDate, LocalDate loanDate) {
-        List<Loan> loans = this.loanRepository.findByClientIdAndLoanDateLessThanEqualAndReturnDateGreaterThanEqual(id, returnDate, loanDate);
+        List<Loan> loans = this.loanRepository.findByClientIdAndLoanDateBeforeAndReturnDateAfter(id, returnDate, loanDate);
         return !loans.isEmpty();
     }
 
     private boolean gameAlreadyLoanedInDates(Long id, LocalDate returnDate, LocalDate loanDate) {
-        List<Loan> loans = this.loanRepository.findByGameIdAndLoanDateLessThanEqualAndReturnDateGreaterThanEqual(id, returnDate, loanDate);
+        List<Loan> loans = this.loanRepository.findByGameIdAndLoanDateBeforeAndReturnDateAfter(id, returnDate, loanDate);
         return !loans.isEmpty();
     }
 }

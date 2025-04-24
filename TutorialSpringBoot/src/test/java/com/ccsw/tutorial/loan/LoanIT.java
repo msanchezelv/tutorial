@@ -1,19 +1,24 @@
 package com.ccsw.tutorial.loan;
 
+import com.ccsw.tutorial.client.model.ClientDto;
+import com.ccsw.tutorial.common.pagination.PageableRequest;
+import com.ccsw.tutorial.config.ResponsePage;
+import com.ccsw.tutorial.game.model.GameDto;
 import com.ccsw.tutorial.loan.model.LoanDto;
-import org.h2.mvstore.Page;
+import com.ccsw.tutorial.loan.model.LoanSearchDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,62 +37,131 @@ public class LoanIT {
     public static final String LOCALHOST = "http://localhost:";
     public static final String SERVICE_PATH = "/loan";
 
-    public static final Long EXISTS_LOAN_ID = 1L;
-    public static final Long NOT_EXISTS_LOAN_ID = 0L;
+    public static final int TOTAL_LOANS = 5;
+    public static final int PAGE_SIZE = 5;
 
-    private static final String GAME_ID_PARAM = "idGame";
-    private static final String CLIENT_ID_PARAM = "idClient";
+    // EXISTS
+    public static final Long GAME_ID = 2L;
+    public static final Long CLIENT_ID = 1L;
+    public static final LocalDate EXISTS_LOANDATE = LocalDate.parse("2025-04-02");
+    public static final LocalDate EXISTS_RETURNDATE = LocalDate.parse("2025-04-09");
+    public static final Long LOAN_EXISTS_ID = 1L;
+    public static final LocalDate DATE_LOAN_1 = LocalDate.parse("2025-04-01");
 
-    private static final Long EXISTS_CLIENT = 1L;
-    private static final Long NOT_EXISTS_CLIENT = 0L;
-    private static final Long EXISTS_GAME = 1L;
-    private static final Long NOT_EXISTS_GAME = 0L;
+    // DOESN'T EXIST
+    public static final Long NOT_EXISTS_CLIENT = 6L;
+    public static final Long NOT_EXISTS_GAME = 7L;
+    public static final LocalDate NOT_EXISTS_LOANDATE = LocalDate.parse("2026-01-01");
 
-    private static final String NOT_EXISTS_LOANDATE = "NotExists";
-    private static final Date EXISTS_LOANDATE = Date.valueOf("2025-04-01");
-
-    private static final String NOT_EXISTS_RETURNDATE = "NotExists";
-    private static final Date EXISTS_RETURNDATE = Date.valueOf("2025-04-08");
+    // PARAMETERS
+    public static final String GAME_PARAM = "idGame";
+    public static final String CLIENT_PARAM = "idClient";
+    public static final String DATE_PARAM = "date";
 
     @LocalServerPort
     private int port;
 
     @Autowired
-    private TestRestTemplate restTemplate;
+    TestRestTemplate restTemplate;
 
-    ParameterizedTypeReference<List<LoanDto>> responseType = new ParameterizedTypeReference<List<LoanDto>>() {
+    ParameterizedTypeReference<List<LoanDto>> responseTypeList = new ParameterizedTypeReference<List<LoanDto>>() {
+    };
+    ParameterizedTypeReference<ResponsePage<LoanDto>> responseTypePage = new ParameterizedTypeReference<ResponsePage<LoanDto>>() {
     };
 
+    // game", "client", "loanDate", "returnDate"}
     private String getUrlWithParams() {
-        return UriComponentsBuilder.fromHttpUrl(LOCALHOST + port + SERVICE_PATH).queryParam(CLIENT_ID_PARAM, "{" + CLIENT_ID_PARAM + "}").queryParam(GAME_ID_PARAM, "{" + GAME_ID_PARAM + "}").encode().toUriString();
+        return UriComponentsBuilder.fromHttpUrl(LOCALHOST + port + SERVICE_PATH).queryParam(GAME_PARAM, "{" + GAME_PARAM + "}").queryParam(CLIENT_PARAM, "{" + CLIENT_PARAM + "}").queryParam(DATE_PARAM, "{" + DATE_PARAM + "}").encode().toUriString();
+    }
+
+    // Tests con Page funcionan
+    @Test
+    public void findFirstPageShouldReturnFiveLoans() {
+
+        LoanSearchDto searchDto = new LoanSearchDto();
+        searchDto.setPageable(new PageableRequest(0, PAGE_SIZE));
+
+        ResponseEntity<ResponsePage<LoanDto>> response = restTemplate.exchange(LOCALHOST + port + SERVICE_PATH, HttpMethod.POST, new HttpEntity<>(searchDto), responseTypePage);
+
+        assertNotNull(response.getBody());
+        assertEquals(TOTAL_LOANS, response.getBody().getTotalElements());
+        assertEquals(PAGE_SIZE, response.getBody().getSize());
     }
 
     @Test
-    public void findWithoutFiltersShouldReturnAllLoansInDB() {
+    public void createNewLoanNoIdShouldCreateNewLoan() {
+        long newLoanId = TOTAL_LOANS + 1;
+        long newLoanSizePage = TOTAL_LOANS + 1;
 
-        Map<String, Object> params = new HashMap<>();
-        params.put(CLIENT_ID_PARAM, null);
-        params.put(GAME_ID_PARAM, null);
+        ClientDto clientDto = new ClientDto();
+        GameDto gameDto = new GameDto();
+        LoanDto loanDto = new LoanDto();
+        LoanSearchDto searchDto = new LoanSearchDto();
 
-        ResponseEntity<List<LoanDto>> response = restTemplate.exchange(getUrlWithParams(), HttpMethod.GET, null, responseType, params);
+        clientDto.setId(CLIENT_ID);
+        gameDto.setId(GAME_ID);
+        loanDto.setClient(clientDto);
+        loanDto.setGame(gameDto);
+        loanDto.setLoanDate(EXISTS_LOANDATE);
+        loanDto.setReturnDate(EXISTS_RETURNDATE);
+
+        restTemplate.exchange(LOCALHOST + port + SERVICE_PATH, HttpMethod.PUT, new HttpEntity<>(loanDto), Void.class);
+
+        searchDto.setPageable(new PageableRequest(0, (int) newLoanSizePage));
+
+        ResponseEntity<ResponsePage<LoanDto>> response = restTemplate.exchange(LOCALHOST + port + SERVICE_PATH, HttpMethod.POST, new HttpEntity<>(searchDto), responseTypePage);
+
+        assertNotNull(response.getBody());
+        assertEquals(newLoanSizePage, response.getBody().getTotalElements());
+
+        LoanDto loanResponse = response.getBody().getContent().stream().filter(loan -> loan.getId().equals(newLoanId)).findFirst().orElse(null);
+        assertNotNull(loanResponse);
+        assertEquals(loanResponse.getClient().getId(), CLIENT_ID);
+        assertEquals(GAME_ID, loanResponse.getGame().getId());
+
+
+    }
+
+    @Test
+    public void deleteLoanExistsIdShouldDeleteExistingLoan() {
+        long newLoanSizePage = TOTAL_LOANS - 1;
+
+        restTemplate.exchange(LOCALHOST + port + SERVICE_PATH + "/" + LOAN_EXISTS_ID, HttpMethod.DELETE, null, Void.class);
+
+        LoanSearchDto searchDto = new LoanSearchDto();
+        searchDto.setPageable(new PageableRequest(0, TOTAL_LOANS));
+
+        ResponseEntity<ResponsePage<LoanDto>> response = restTemplate.exchange(LOCALHOST + port + SERVICE_PATH, HttpMethod.POST, new HttpEntity<>(searchDto), responseTypePage);
 
         assertNotNull(response);
-        assertEquals(5, response.getBody().size());
+        assertEquals(newLoanSizePage, response.getBody().getTotalElements());
     }
 
+    // Tests con List no funcionan
     @Test
-    public void findExistsClientShouldReturnLoans() {
+    public void findWithoutFiltersShouldReturnAll() {
+        Map<String, Object> params = new HashMap<>();
+        params.put(GAME_PARAM, null);
+        params.put(CLIENT_PARAM, null);
+        params.put(DATE_PARAM, null);
 
-    }
+        ResponseEntity<List<LoanDto>> response = restTemplate.exchange(getUrlWithParams(), HttpMethod.GET, null, responseTypeList, params);
 
-    @Test
-    public void findNotExistsClientShouldReturnLoans() {
+        assertNotNull(response);
+        assertEquals(TOTAL_LOANS, response.getBody().size());
 
-        M
     }
 
     @Test
     public void findExistsClientAndGameShouldReturnLoans() {
+        int FILTERED_LOANS = 2;
+
+        Map<String, Object> params = new HashMap<>();
+        params.put(GAME_PARAM, null);
+        params.put(CLIENT_PARAM, CLIENT_ID);
+        params.put(DATE_PARAM, null);
+
+        ResponseEntity<List<LoanDto>> response = restTemplate.exchange(getUrlWithParams(), HttpMethod.GET, null, responseTypeList, params);
 
     }
 
