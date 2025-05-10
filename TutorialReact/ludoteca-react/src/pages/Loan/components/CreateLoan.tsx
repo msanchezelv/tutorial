@@ -10,7 +10,7 @@ import { LoaderContext } from "../../../context/LoaderProvider";
 import { Client } from "../../../types/Client";
 import { Game } from "../../../types/Game";
 import { MenuItem } from "@mui/material";
-import { useGetGamesQuery, useGetClientsQuery } from "../../../redux/services/ludotecaApi";
+import { useGetGamesQuery, useGetAllClientsQuery } from "../../../redux/services/ludotecaApi";
 
  interface Props {
     loan: Loan | null;
@@ -39,7 +39,7 @@ import { useGetGamesQuery, useGetClientsQuery } from "../../../redux/services/lu
       title: "",
       idCategory: ""
     });
-    const { data: clients, isLoading: isLoadingClients } = useGetClientsQuery(null);
+    const { data: clients, isLoading: isLoadingClients } = useGetAllClientsQuery();
 
     useEffect(() => {
       if (props.loan) {

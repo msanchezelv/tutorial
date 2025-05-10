@@ -25,7 +25,7 @@ import {
   useCreateLoanMutation,
   useUpdateLoanMutation,
   useGetLoansByPageQuery,
-  useGetClientsQuery,
+  useGetAllClientsQuery,
   useGetGamesQuery,
 } from "../../redux/services/ludotecaApi";
 import { LoaderContext } from "../../context/LoaderProvider";
@@ -52,7 +52,8 @@ export const Loan = () => {
   const dispatch = useAppDispatch();
   const loader = useContext(LoaderContext);
 
-  const { data: clients } = useGetClientsQuery(null);
+  const { data: clients } = useGetAllClientsQuery();
+  console.log("CLIENTES", clients);
   const { data: games } = useGetGamesQuery({title: '', idCategory: ''});
 
 

@@ -102,6 +102,12 @@ export const Author = () => {
   }, [error]);
 
   const createAuthor = (author: AuthorModel) => {
+
+    if (!author.name.trim() || !author.nationality.trim()) {
+    dispatch(setMessage({ text: "Nombre y nacionalidad no pueden estar vacíos", type: "error" }));
+    return;
+    }
+
     setOpenCreate(false);
     if (author.id) {
       updateAuthorApi(author)

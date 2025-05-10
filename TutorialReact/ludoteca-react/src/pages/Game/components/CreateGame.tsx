@@ -54,10 +54,21 @@ export default function CreateGame(props: Props) {
   const handleChangeForm = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setForm({
-      ...form,
-      [event.target.id]: event.target.value,
-    });
+    const { id, value } = event.target;
+
+    if (id === "age") {
+      const numericValue = Number(value);
+      if (numericValue < 0) return;
+      setForm({
+        ...form,
+        [id]: numericValue,
+      });
+    } else {
+      setForm({
+        ...form,
+        [id]: value,
+      });
+    }
   };
 
   const handleChangeSelect = (
@@ -106,6 +117,7 @@ export default function CreateGame(props: Props) {
             variant="standard"
             onChange={handleChangeForm}
             value={form.age}
+            inputProps={{ min: 0 }}
           />
           <TextField
             id="category"
@@ -147,7 +159,13 @@ export default function CreateGame(props: Props) {
         <DialogActions>
           <Button onClick={props.closeModal}>Cancelar</Button>
           <Button
-            onClick={() =>
+            onClick={() => {
+              const validAge = Number(form.age) >= 0;
+              if (!validAge) {
+                alert("La edad recomendada no puede ser menor que 0");
+                return;
+              }
+            
               props.create({
                 id: "",
                 title: form.title,
@@ -155,7 +173,7 @@ export default function CreateGame(props: Props) {
                 category: form.category,
                 author: form.author,
               })
-            }
+            }}
             disabled={
               !form.title || !form.age || !form.category || !form.author
             }

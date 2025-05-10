@@ -2,15 +2,17 @@ package com.ccsw.tutorial.client;
 
 import com.ccsw.tutorial.client.model.Client;
 import com.ccsw.tutorial.client.model.ClientDto;
+import com.ccsw.tutorial.client.model.ClientSearchDto;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * @author marina31sanchez
- *
  */
 
 @Service
@@ -24,9 +26,18 @@ public class ClientServiceImpl implements ClientService {
      * {@inheritDoc}
      */
     @Override
-    public List<Client> findAll() {
+    public Client get(Long id) {
 
-        return (List<Client>) this.clientRepository.findAll();
+        return this.clientRepository.findById(id).orElse(null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Page<Client> findPage(ClientSearchDto dto) {
+
+        return this.clientRepository.findAll(dto.getPageable().getPageable());
     }
 
     /**
@@ -39,10 +50,10 @@ public class ClientServiceImpl implements ClientService {
         if (id == null) {
             client = new Client();
         } else {
-            client = this.clientRepository.findById(id).orElse(null);
+            client = this.get(id);
         }
 
-        client.setName(dto.getName());
+        BeanUtils.copyProperties(dto, client, "id");
 
         this.clientRepository.save(client);
     }
@@ -53,17 +64,20 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void delete(Long id) throws Exception {
 
-        if (this.clientRepository.findById(id).orElse(null) == null) {
+        if (this.get(id) == null) {
             throw new Exception("Client with id " + id + " , doesn't exist");
         }
 
         this.clientRepository.deleteById(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Client getClientById(Long id) {
+    public List<Client> findAll() {
 
-        return this.clientRepository.findById(id).orElse(null);
+        return (List<Client>) this.clientRepository.findAll();
     }
 
 }

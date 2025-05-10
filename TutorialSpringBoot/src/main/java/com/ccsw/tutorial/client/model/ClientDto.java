@@ -2,10 +2,11 @@ package com.ccsw.tutorial.client.model;
 
 /**
  * @author marina31sanchez
- *
  */
 public class ClientDto {
+
     private Long id;
+
     private String name;
 
     /**

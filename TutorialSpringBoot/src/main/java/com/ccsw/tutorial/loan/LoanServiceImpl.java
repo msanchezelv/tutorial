@@ -66,7 +66,7 @@ public class LoanServiceImpl implements LoanService {
 
         loan.setGame(gameService.getGameById(dto.getGame().getId()));
 
-        loan.setClient(clientService.getClientById(dto.getClient().getId()));
+        loan.setClient(clientService.get(dto.getClient().getId()));
 
         this.loanRepository.save(loan);
     }

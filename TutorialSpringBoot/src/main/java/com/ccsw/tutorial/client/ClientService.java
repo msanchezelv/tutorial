@@ -2,6 +2,8 @@ package com.ccsw.tutorial.client;
 
 import com.ccsw.tutorial.client.model.Client;
 import com.ccsw.tutorial.client.model.ClientDto;
+import com.ccsw.tutorial.client.model.ClientSearchDto;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -10,16 +12,25 @@ import java.util.List;
  */
 public interface ClientService {
     /**
-     * Method to return all {@link Client}
+     * Recupera un {@link Client} a través de su ID
      *
-     * @return {@link List} de {@link Client}
+     * @param id PK de la entidad
+     * @return {@link Client}
      */
-    List<Client> findAll();
+    Client get(Long id);
+
+    /**
+     * Metodo para recuperar un listado paginado de {@link Client}
+     *
+     * @param dto dto de búsqueda
+     * @return {@link Page} de {@link Client}
+     */
+    Page<Client> findPage(ClientSearchDto dto);
 
     /**
      * Method to create or update a {@link Client}
      *
-     * @param id PK de la entidad
+     * @param id  PK de la entidad
      * @param dto datos de la entidad
      */
     void save(Long id, ClientDto dto);
@@ -30,11 +41,12 @@ public interface ClientService {
      * @param id PK de la entidad
      */
     void delete(Long id) throws Exception;
-
+    
     /**
-     * Method to get a client == id
+     * Method to return all {@link Client}
      *
-     * @param id
+     * @return {@link List} de {@link Client}
      */
-    Client getClientById(Long id);
+    List<Client> findAll();
+
 }

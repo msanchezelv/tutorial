@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Category } from "../../types/Category";
 import { Author, AuthorResponse } from "../../types/Author";
-import { Client } from "../../types/Client";
+import { Client, ClientResponse } from "../../types/Client";
 import { Game } from "../../types/Game";
 import { Loan, LoanResponse } from "../../types/Loan";
 
@@ -131,8 +131,30 @@ export const ludotecaAPI = createApi({
 
 
     // Clientes
-    getClients: builder.query<Client[], null>({
-      query: () => "client",
+    getAllClients: builder.query<Client[], void>({
+      query: () => ({
+        url: "/client",
+        method: "GET",
+      }),
+      providesTags: ["Client"],
+    }),
+    
+    getClients: builder.query<
+      ClientResponse,
+      { pageNumber: number; pageSize: number }
+    >({
+      query: ({ pageNumber, pageSize }) => {
+        return {
+          url: "client",
+          method: "POST",
+          body: {
+            pageable: {
+              pageNumber,
+              pageSize,
+            },
+          },
+        };
+      },
       providesTags: ["Client"],
     }),
     createClient: builder.mutation({
@@ -228,6 +250,7 @@ export const {
   useGetGamesQuery,
   useUpdateGameMutation,
   useGetClientsQuery,
+  useGetAllClientsQuery,
   useCreateClientMutation,
   useDeleteClientMutation,
   useUpdateClientMutation,
