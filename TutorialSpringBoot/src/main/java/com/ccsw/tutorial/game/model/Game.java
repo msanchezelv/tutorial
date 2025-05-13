@@ -3,10 +3,11 @@ package com.ccsw.tutorial.game.model;
 import com.ccsw.tutorial.author.model.Author;
 import com.ccsw.tutorial.category.model.Category;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 
 /**
  * @author ccsw
- *
  */
 @Entity
 @Table(name = "game")
@@ -17,9 +18,11 @@ public class Game {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @NotBlank
     @Column(name = "title", nullable = false)
     private String title;
 
+    @Min(0)
     @Column(name = "age", nullable = false)
     private String age;
 

@@ -1,10 +1,10 @@
 package com.ccsw.tutorial.category.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 /**
  * @author ccsw
- *
  */
 @Entity
 @Table(name = "category")
@@ -15,6 +15,7 @@ public class Category {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @NotBlank
     @Column(name = "name", nullable = false)
     private String name;
 

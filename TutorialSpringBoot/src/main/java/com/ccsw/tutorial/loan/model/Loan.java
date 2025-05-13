@@ -3,6 +3,7 @@ package com.ccsw.tutorial.loan.model;
 import com.ccsw.tutorial.client.model.Client;
 import com.ccsw.tutorial.game.model.Game;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
 
@@ -19,10 +20,12 @@ public class Loan {
     private Long id;
 
     @ManyToOne
+    @NotBlank
     @JoinColumn(name = "game", nullable = false)
     private Game game;
 
     @ManyToOne
+    @NotBlank
     @JoinColumn(name = "client", nullable = false)
     private Client client;
 

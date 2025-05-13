@@ -1,10 +1,10 @@
 package com.ccsw.tutorial.author.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 /**
  * @author ccsw
- *
  */
 @Entity
 @Table(name = "author")
@@ -15,9 +15,11 @@ public class Author {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @NotBlank
     @Column(name = "name", nullable = false)
     private String name;
 
+    @NotBlank
     @Column(name = "nationality")
     private String nationality;
 
